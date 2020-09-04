@@ -28,16 +28,16 @@ galaxy_info:
   galaxy_tags: [
     aruba,
     esp,
-    aruba_central
+    aruba_central,
     arubacentral,
     central,
     switch,
     arubaswitches,
     arubaoss,
-    arubaosswitch
+    arubaosswitch,
     aos,
     arubaos,
-    aoscx
+    aoscx,
     'hpe',
     'datacenter'
     ]
