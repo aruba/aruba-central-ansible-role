@@ -38,8 +38,7 @@ galaxy_info:
     aos,
     arubaos,
     aoscx,
-    'hpe',
-    'datacenter'
+    hpe,
     ]
     # NOTE: A tag is limited to a single word comprised of alphanumeric characters.
     #       Maximum 20 tags per role.
