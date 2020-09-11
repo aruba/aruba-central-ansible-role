@@ -228,7 +228,6 @@ def create_group(central_api, group_name, group_attributes):
                 }}}
         headers = central_api.get_headers(False, "post")
         result = central_api.post(path=path, headers=headers, data=data)
-        result['resp'] = json.loads(result['resp'])
         return result
     return error_msg("create")
 
