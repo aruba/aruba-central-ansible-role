@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 '''
 Ansible httpapi plugin to connect with Aruba Central
 '''
@@ -25,9 +25,8 @@ Ansible httpapi plugin to connect with Aruba Central
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
-import requests
 import json
+import requests
 from ansible.module_utils._text import to_text
 from ansible.plugins.httpapi import HttpApiBase
 
@@ -62,12 +61,13 @@ class HttpApi(HttpApiBase):
     def login(self, username, password):
         try:
             access_token = self.get_option("access_token").decode("UTF-8")
+        except AttributeError:
+            access_token = self.get_option("access_token")
         except Exception:
             raise Exception("Missing access token! Please provide"
                             " ansible_httpapi_session_key in the inventory!")
         self.access_token = access_token
-        self.connection._auth = {"Authorization": "Bearer " +
-                                                  self.access_token}
+        self.connection._auth = {"Authorization": "Bearer " + self.access_token}
 
     def send_file(self, path, method, filename):
         if not self.connection._connected:
@@ -104,14 +104,18 @@ class HttpApi(HttpApiBase):
                                                        path=path,
                                                        method=method)
         try:
-            if "Accept" in headers and headers["Accept"] == "application/json":
+            if "Accept" in headers and headers["Accept"] == "multipart/form-data":
+                response_data = to_text(response_data.read())
+            elif "Content-Type" in headers and headers["Content-Type"] == "application/json":
                 response_data = json.loads(to_text(response_data.read()))
             else:
                 response_data = response_data.read()
+
         except ValueError:
             response_data = response_data.read()
         except AttributeError as arr:
-            raise Exception(str(response) + str(arr))
+            raise str(response) + str(arr)
+
         return self.handle_response(response, response_data)
 
     def handle_response(self, response, response_data):
