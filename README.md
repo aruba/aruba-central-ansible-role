@@ -1,6 +1,6 @@
 # aruba-central-ansible-role
 
-This Ansible Network role provides a set of platform dependent configuration management modules specifically designed for  Aruba Central, which a cloud-based Network Management System.
+This Ansible Network role provides a set of platform dependent configuration management modules specifically designed for Aruba Central, which a cloud-based Network Management System.
 
 ## [](https://github.com/aruba/aruba-central-ansible-role#requirements)Requirements
 
@@ -98,14 +98,14 @@ If role installed through  [Galaxy](https://galaxy.ansible.com/arubanetworks/aru
 Contribution
 -------
 At Aruba Networks we're dedicated to ensuring the quality of our products, so if you find any
-issues at all please open an issue on our [Github](https://github.com/aruba/aoscx-ansible-role) and we'll be sure to respond promptly!
+issues at all please open an issue on our [Github](https://github.com/aruba/aruba-central-ansible-role) and we'll be sure to respond promptly!
 
-For more contribution opportunities follow our guidelines outlined in our [CONTRIBUTING.md](https://github.com/aruba/aoscx-ansible-role/blob/master/CONTRIBUTING.md)
+For more contribution opportunities follow our guidelines outlined in our [CONTRIBUTING.md](https://github.hpe.com/switchautomation/aruba-central-ansible-role/blob/master/CONTRIBUTING.md)
 
 License
 -------
 
-Apache 2.0
+MIT
 
 Author Information
 ------------------
