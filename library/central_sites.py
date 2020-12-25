@@ -410,9 +410,9 @@ def api_call(module):
             module.exit_json(changed=False, msg=result['resp'],
                              response_code=result['code'])
         elif site_address is not None:
-            data = dict(site_dict.items() + addr_dict.items())
+            data = dict(list(site_dict.items()) + list(addr_dict.items()))
         elif geolocation is not None:
-            data = dict(site_dict.items() + geo_dict.items())
+            data = dict(list(site_dict.items()) + list(geo_dict.items()))
         if action == "create":
             result = create_site(central_api, data)
         elif action == "update":
