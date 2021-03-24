@@ -48,7 +48,7 @@ options:
       - This is the Aruba Central Access token obtained from the API token on
         Central API gateway
     vars:
-      - name: ansible_httpapi_session_key
+      - name: ansible_httpapi_central_access_token
         version_added: '2.9'
 """
 
@@ -68,7 +68,7 @@ class HttpApi(HttpApiBase):
                 self.access_token  = self.get_option("access_token")
         else:
           raise Exception("Access token is either invalid or not present in the inventory file! "
-                          "Use ansible_httpapi_session_key variable in the inventory file with "
+                          "Use ansible_httpapi_central_access_token variable in the inventory file with "
                           "a valid token.")
 
     def send_request(self, data, headers, **message_kwargs):

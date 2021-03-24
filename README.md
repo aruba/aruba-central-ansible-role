@@ -47,7 +47,7 @@ The variables that should be defined in your inventory for your Aruba Central ac
 - `ansible_connection`: Must always be set to  `httpapi`
 - `ansible_network_os`: Must always be set to  `aruba_central`
 - `ansible_httpapi_use_ssl`: Must always be set to  `True`
-- `ansible_httpapi_session_key`: Aruba Central's API access token
+- `ansible_httpapi_central_access_token`: Aruba Central's API access token
 
 ### [](https://github.com/aruba/aos-wlan-ansible-role#sample-inventories)Sample Inventories:
 
@@ -61,13 +61,13 @@ all:
       ansible_connection: httpapi
       ansible_network_os: aruba_central
       ansible_httpapi_use_ssl: True
-      ansible_httpapi_session_key: CnjDaXXxvnjrvJRwxxxxXXxxXXXXxxxx
+      ansible_httpapi_central_access_token: CnjDaXXxvnjrvJRwxxxxXXxxXXXXxxxx
 ```
 
 ##### INI
 
 ```INI
-arubacentral ansible_host=apigw-prod2.central.arubanetworks.com  ansible_connection=httpapi ansible_network_os=aruba_central  ansible_httpapi_use_ssl=True  ansible_httpapi_session_key=CnjDaXXxvnjrvJRwxxxxXXxxXXXXxxxx
+arubacentral ansible_host=apigw-prod2.central.arubanetworks.com  ansible_connection=httpapi ansible_network_os=aruba_central  ansible_httpapi_use_ssl=True  ansible_httpapi_central_access_token=CnjDaXXxvnjrvJRwxxxxXXxxXXXXxxxx
 ```
 
 ## [](https://github.com/aruba/aruba-central-ansible-role#example-playbook)Example Playbooks
