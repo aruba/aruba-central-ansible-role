@@ -8,4 +8,4 @@
 
 ## Notable Changes
 * Bug fixes in the module files related to Python3
-* Added requirement.yml to install ansible.netcommon for Ansible 2.10+
+* Added requirements.yml to install ansible.netcommon for Ansible 2.10+
