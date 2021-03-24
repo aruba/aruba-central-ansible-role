@@ -327,7 +327,7 @@ def main():
                              choices=["IAP", "ArubaSwitch", "CX",
                                       "MobilityController"]),
             version=dict(required=False, type='str', default="ALL"),
-            model=dict(required=False, type='str', defaul="ALL"),
+            model=dict(required=False, type='str', default="ALL"),
             local_file_path=dict(required=False, type='path', default=None)
             ))
     success_codes = [200, 201]

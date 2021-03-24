@@ -29,6 +29,8 @@ import json
 import requests
 from ansible.module_utils._text import to_text
 from ansible.plugins.httpapi import HttpApiBase
+from ansible.utils.display import Display
+display = Display()
 
 DOCUMENTATION = """
 ---
@@ -50,7 +52,6 @@ options:
         version_added: '2.9'
 """
 
-
 class HttpApi(HttpApiBase):
     def __init__(self, *args, **kwargs):
         super(HttpApi, self).__init__(*args, **kwargs)
@@ -58,43 +59,20 @@ class HttpApi(HttpApiBase):
         self.access_token = None
         self.url = None
 
-    def login(self, username, password):
-        try:
-            access_token = self.get_option("access_token").decode("UTF-8")
-        except AttributeError:
-            access_token = self.get_option("access_token")
-        except Exception:
-            raise Exception("Missing access token! Please provide"
-                            " ansible_httpapi_session_key in the inventory!")
-        self.access_token = access_token
-        self.connection._auth = {"Authorization": "Bearer " + self.access_token}
-
-    def send_file(self, path, method, filename):
-        if not self.connection._connected:
-            self.connection._connect()
-        host = self.connection.get_option('host')
-        protocol = 'https' if self.connection.get_option('use_ssl') else 'http'
-        self.url = '%s://%s%s' % (protocol, host, path)
-        verify = self.connection.get_option('validate_certs')
-        headers = {"Authorization": "Bearer " + self.access_token}
-        files = {}
-        if "template_variables" in path:
-            files = {"variables": open(filename, "rb")}
-        elif "templates" in path:
-            files = {"template": open(filename, "rb")}
-        session = requests.Session()
-        req = requests.Request(method=method, url=self.url, headers=headers,
-                               files=files)
-        prepped = session.prepare_request(req)
-        settings = session.merge_environment_settings(prepped.url, {}, None,
-                                                      verify, None)
-        response = session.send(prepped, **settings)
-        response_data = response.text
-        return response_data, response.status_code
+    def valid_token(self):
+        if self.get_option("access_token") is not None:
+            headers = {'Authorization': "Bearer " + self.get_option("access_token") }
+            path = "/configuration/v2/groups?limit=1&offset=0"
+            response, response_data = self.connection.send(path=path, method="GET", headers=headers, data={})
+            if response.code == 200 and response_data != None:
+                self.access_token  = self.get_option("access_token")
+        else:
+          raise Exception("Access token is either invalid or not present in the inventory file! "
+                          "Use ansible_httpapi_session_key variable in the inventory file with "
+                          "a valid token.")
 
     def send_request(self, data, headers, **message_kwargs):
-        if not self.connection._connected:
-            self.connection._connect()
+        self.valid_token()
         headers['Authorization'] = "Bearer " + self.access_token
         path = message_kwargs['path']
         method = message_kwargs['method']
@@ -118,6 +96,30 @@ class HttpApi(HttpApiBase):
 
         return self.handle_response(response, response_data)
 
+    def send_file(self, path, method, filename):
+        self.valid_token()
+        host = self.connection.get_option('host')
+        protocol = 'https' if self.connection.get_option('use_ssl') else 'http'
+        self.url = '%s://%s%s' % (protocol, host, path)
+        verify = self.connection.get_option('validate_certs')
+        headers = {"Authorization": "Bearer " + self.access_token}
+        files = {}
+        if "template_variables" in path:
+            files = {"variables": open(filename, "rb")}
+        elif "templates" in path:
+            files = {"template": open(filename, "rb")}
+        session = requests.Session()
+        req = requests.Request(method=method, url=self.url, headers=headers,
+                               files=files)
+        prepped = session.prepare_request(req)
+        settings = session.merge_environment_settings(prepped.url, {}, None,
+                                                      verify, None)
+        response = session.send(prepped, **settings)
+        response_data = response.text
+        return response_data, response.status_code
+
+
     def handle_response(self, response, response_data):
         if response and response_data:
             return response_data, response.code
+

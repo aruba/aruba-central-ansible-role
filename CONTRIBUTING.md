@@ -33,8 +33,8 @@ This document provides guidelines on contributing to this repository. Please fol
 The best way to directly collaborate with the project contributors is through GitHub.
 
 * If you want to raise an issue such as a defect, an enhancement request, feature request, or a general issue, please open a GitHub issue.
-* If you want to contribute to our code by either fixing a problem, enhancing some code, or creating a new feature, please open a GitHub pull request against the development branch. 
-> **Note:** All pull requests require an associated issue number, must be made against the **development** branch, and require acknowledgement of the DCO. See the [Licensing](#licensing) section below.
+* If you want to contribute to our code by either fixing a problem, enhancing some code, or creating a new feature, please open a GitHub pull request. 
+> **Note:** All pull requests require an associated issue number and require acknowledgement of the DCO. See the [Licensing](#licensing) section below.
 
 Before you start to code, we recommend discussing your plans through a GitHub issue, especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give you feedback on your design, and help you find out if someone else is working on the same thing.
 
