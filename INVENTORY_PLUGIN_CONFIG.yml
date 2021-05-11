@@ -1,0 +1,8 @@
+access_token: <Enter Access Token>
+api_gateway: <Enter BASE URL of API Gateway>
+client_id: <Enter Client ID>
+client_secret: <Enter Client Secret>
+host: central  #do not change
+plugin: central_inventory #do not change
+refresh_token: <Enter Refresh Token>
+
