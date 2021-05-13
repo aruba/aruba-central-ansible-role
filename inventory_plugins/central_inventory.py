@@ -8,30 +8,31 @@ __metaclass__ = type
 DOCUMENTATION = r"""
     name: central_inventory
     plugin_type: inventory
-    short_description: Returns Ansible inventory from JSON
-    description: Returns Returns Ansible inventory from JSON
-                 file with Central credentials
+    short_description: Returns Ansible inventory from YAML
+    description: Returns/Generates an Ansible inventory for
+                 Aruba Central from a YAML based inventory
+                 plugin config file with Central credentials.
     options:
       plugin:
           description: Name of the plugin
           required: true
           choices: ["central_inventory"]
       host:
-        description: Hostname for the inventory file which is
-                     generated to plugin. Its a good practice to
-                     name this parameter as "central", since
+        description: Hostname for the inventory file which gets
+                     generated through this plugin. Its a good practice
+                     to name this parameter as "central", since
                      Aruba Central  will always be the singular host
                      for the aruba_central_role.
         required: true
       access_token:
         description: This is the Aruba Central Access token obtained
-                     from the API token on
-                     Central API gateway.
+                     from the API token on Central API gateway.
+                     It is valid for only 7200 seconds or 2 hours.
         required: true
       refresh_token:
         description: This is the Aruba Central Refresh token obtained
                      from the API token on Central API gateway. It is used
-                     to renew the an invalid access token, since access
+                     to renew an invalid access token, since access
                      token is valid only for 7200 seconds or 2 hours.
         required: true
       client_id:
@@ -46,6 +47,9 @@ DOCUMENTATION = r"""
         required: true
       api_gateway:
         description: This is base url for the Aruba Central API gateway.
+                     For example, for US-2 cluster the API Gateway base url
+                     is apigw-prod2.central.arubanetworks.com. This base url
+                     is different for different clusters.
         required: true
 """
 import json
