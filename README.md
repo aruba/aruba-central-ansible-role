@@ -59,7 +59,7 @@ There are two ways in which you can use an inventory or host file with the Aruba
 
 The variables that should be defined in your inventory for your Aruba Central account are:
 
-- `ansible_host`: Base URL path for API-gateway on Aruba Central in FQDN format
+- `ansible_host`: Cluster-specific base URL path for API Gateway on Aruba Central in FQDN format, which can be found from the base url of the API Documentation page on API Gateway
 - `ansible_connection`: Must always be set to  `httpapi`
 - `ansible_network_os`: Must always be set to  `aruba_central`
 - `ansible_httpapi_use_ssl`: Must always be set to  `True`
@@ -105,7 +105,7 @@ playbooks_dir
 +-- inventory_plugins/
 |   +-- central_inventory.py
 ```
-- Where `inv_src.yml` or any other `.yml` file with a different name acts as the Inventory Plugin Config file. [Sample Inventory Plugin Config File](https://github.com/aruba/aruba-central-ansible-role#inventory-plugin-config-variables) and the variables it uses is given below.
+- Where `**inv_src.yml**` or any other `**.yml**` file with a different name can act as the Inventory Plugin Config file. [Sample Inventory Plugin Config File](https://github.com/aruba/aruba-central-ansible-role#inventory-plugin-config-variables) and the variables it uses are given below.
 - Inventory Plugin Config File should not be used with Ansible Vault since the inventory plugin needs to write the renewed tokens back to the plugin config file.
 - User has to ensure that a valid Access and Refresh Token has been entered in the Inventory Plugin Config file for the first time. If both tokens are invalid, the inventory plugin will modify the file with **<Enter a Valid Access/Refresh Token>** message in the Inventory Plugin Config file.
 - Central's **`refresh_token`** is valid for a period of **14 days**. If not used until 14 days, the token will be revoked and a new token has to be created. Refresh token validity is non-configurable at the moment.
@@ -135,7 +135,7 @@ $ mv inventory_plugins/ <path_to_playbooks_directory>
 The variables that should be defined in your inventory plugin config file for your Aruba Central account are:
 
 - `access_token`: Aruba Central's API Access Token.
-- `api_gateway`: Base URL path for API-gateway on Aruba Central in FQDN format
+- `api_gateway`: Cluster-specific base URL path for API Gateway on Aruba Central in FQDN format, which can be found from the base url of the API Documentation page on API Gateway
 - `client_id`: Aruba Central's API Client ID
 - `client_secret`: Aruba Central's API Client Secret
 - `host`: Must always be set to  `central`
@@ -163,6 +163,18 @@ refresh_token: X12daE6BFhk8QqqzzeifHTYxxZZ12XxX
 
 ### Including the Role
 
+If role installed through  [Galaxy](https://galaxy.ansible.com/arubanetworks/aruba_central_role)  set role to  `arubanetworks.aruba_central_role`:
+
+    ---
+    -  hosts: all
+       roles:
+         - role: arubanetworks.aruba_central_role
+       tasks:
+       - name: Get all the UI and Template Groups on Central
+         central_groups:
+           action: get_groups
+           limit: 20
+           offset: 0
 If role installed through  [Github](https://github.com/aruba/aruba-central-ansible-role)  set role to  `aruba-central-ansible-role`:
 
     ---
@@ -176,18 +188,6 @@ If role installed through  [Github](https://github.com/aruba/aruba-central-ansib
            limit: 20
            offset: 0
 
-If role installed through  [Galaxy](https://galaxy.ansible.com/arubanetworks/aruba_central_role)  set role to  `arubanetworks.aruba_central_role`:
-
-    ---
-    -  hosts: all
-       roles:
-         - role: arubanetworks.aruba_central_role
-       tasks:
-       - name: Get all the UI and Template Groups on Central
-         central_groups:
-           action: get_groups
-           limit: 20
-           offset: 0
   
 ## [](https://github.com/aruba/aruba-central-ansible-role#playbook-execution) Playbook Execution
 
