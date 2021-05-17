@@ -44,14 +44,15 @@ ansible-galaxy install git+https://github.com/aruba/aruba-central-ansible-role.g
 ## [](https://github.com/aruba/aruba-central-ansible-role#inventory) Inventory/Host File
 There are two ways in which you can use an inventory or host file with the Aruba Central Ansible Role:
 1. **Inventory** 
-    - Host file which tells Ansible the required httpapi plugin to use with some other details and the access token.
+	    - Host file which tells Ansible the required httpapi plugin to use with some other details and the access token.
 2. **Inventory Plugin Config File** or **Inventory Source**
+	- An inventory source file which is used by the inventory plugin.
 	- A typical inventory plugin implementation has a plugin script (usually written in Python), and an inventory source (in this case it is a YAML file).
-	- Based on Ansible Documentation,  Inventory sources are the input strings that inventory plugins work with. An inventory source can be a path to a file or to a script, or it can be raw data that the plugin can interpret to dynamically generate an inventory variables.
-    - Only `.yml` files with below as mentioned Inventory Plugin Config File variables are accepted as an inventory source by the inventory plugin.
-- You can use either type of Inventory File depending on your need. 
-	- If do not require auto-renew of tokens, use the simple Inventory file
-	- Or, if you wish to have the auto-renew of tokens, use an Inventory Plugin Config File for the Inventory Plugin.
+	- Based on Ansible Documentation,  Inventory sources are the input strings that inventory plugins work with. An inventory source can be a path to a file or to a script, or it can be raw data that the plugin can interpret to dynamically generate inventory variables.
+    - Only `.yml` files with [Inventory Plugin Config File variables](https://github.com/aruba/aruba-central-ansible-role#inventory-plugin-config-variables) are accepted as an inventory source by the inventory plugin for this role.
+- You can use either of the above files depending on your need. 
+	- If do not require auto-renew of tokens, use the simple [Inventory file](https://github.com/aruba/aruba-central-ansible-role#sample-inventory)
+	- Or, if you wish to have the auto-renew of tokens, use an [Inventory Plugin Config File](https://github.com/aruba/aruba-central-ansible-role#sample-inventory-plugin-config-file) for the Inventory Plugin.
 
 
 ## Inventory 
@@ -59,7 +60,7 @@ There are two ways in which you can use an inventory or host file with the Aruba
 
 The variables that should be defined in your inventory for your Aruba Central account are:
 
-- `ansible_host`: Cluster-specific base URL path for API Gateway on Aruba Central in FQDN format, which can be found from the base url of the API Documentation page on API Gateway
+- `ansible_host`: Cluster-specific Base-URL for the API Gateway on Aruba Central in FQDN format, which can be found in the API Documentation URL on API Gateway
 - `ansible_connection`: Must always be set to  `httpapi`
 - `ansible_network_os`: Must always be set to  `aruba_central`
 - `ansible_httpapi_use_ssl`: Must always be set to  `True`
@@ -92,7 +93,7 @@ arubacentral ansible_host=apigw-prod2.central.arubanetworks.com  ansible_connect
 
 ### Caveats
 - Conventionally, an Inventory Plugin can not be shipped within a role since Ansible executes the Inventory Plugin before execution of the Playbook or Role.  More information can be found on [Ansible Docs](https://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html#inventory-plugins).
-	- Therefore, until we publish the Aruba Central Ansible Collection, you need to perform the following workaround for using custom inventory plugin for Central with the modules of this role - which will take care of the auto-renew of tokens.
+	- Therefore, until we publish the Aruba Central Ansible Collection, you need to perform the following workaround for using the custom inventory plugin for this Ansible role for Central - which will take care of the auto-renew of tokens.
 
 **Method 1:**
 - Copy the `central_inventory.py` inventory plugin file  from [GitHub](https://raw.githubusercontent.com/aruba/aruba-central-ansible-role/master/inventory_plugins/central_inventory.py) and store it within an `inventory_plugins` directory in your playbooks directory. 
@@ -106,12 +107,12 @@ playbooks_dir
 |   +-- central_inventory.py
 ```
 - Where `**inv_src.yml**` or any other `**.yml**` file with a different name can act as the Inventory Plugin Config file. [Sample Inventory Plugin Config File](https://github.com/aruba/aruba-central-ansible-role#inventory-plugin-config-variables) and the variables it uses are given below.
-- Inventory Plugin Config File should not be used with Ansible Vault since the inventory plugin needs to write the renewed tokens back to the plugin config file.
-- User has to ensure that a valid Access and Refresh Token has been entered in the Inventory Plugin Config file for the first time. If both tokens are invalid, the inventory plugin will modify the file with **<Enter a Valid Access/Refresh Token>** message in the Inventory Plugin Config file.
+- Inventory Plugin Config File should not be used with Ansible Vault since the inventory plugin needs to write the renewed refresh and access tokens back to the plugin config file.
+- Initially the user has to ensure that a valid Access and Refresh Token has been entered in the Inventory Plugin Config file for the first time. If both tokens are invalid, the inventory plugin will modify the file with **<Enter a Valid Access/Refresh Token>** message in the Inventory Plugin Config file and the execution will fail with "Unauthorized" failure.
 - Central's **`refresh_token`** is valid for a period of **14 days**. If not used until 14 days, the token will be revoked and a new token has to be created. Refresh token validity is non-configurable at the moment.
 
 **Method 2:**
-- Once the role is installed,  go to the roles directory.
+- Once the role is installed, go to the roles directory. Use the following commands to get the path where role is installed and move inventory_plugins directory with the plugin file.
  ```
 $ ansible-galaxy role list 
 
@@ -119,7 +120,8 @@ $ ansible-galaxy role list
 # /home/admin/.ansible/roles
 - arubanetworks.aruba_central_role, 0.2.1
  ``` 
-- The role name might differ based on how you chose to install it.
+- Select the path and go to the roles directory
+- The role name might differ based on how you chose to install it
 - Once you have the path move the inventory plugin directory to your playbooks directory
 ```
 $ cd /home/admin/.ansible/roles
@@ -135,7 +137,7 @@ $ mv inventory_plugins/ <path_to_playbooks_directory>
 The variables that should be defined in your inventory plugin config file for your Aruba Central account are:
 
 - `access_token`: Aruba Central's API Access Token.
-- `api_gateway`: Cluster-specific base URL path for API Gateway on Aruba Central in FQDN format, which can be found from the base url of the API Documentation page on API Gateway
+- `api_gateway`: Cluster-specific Base-URL for the API Gateway on Aruba Central in FQDN format, which can be found in the API Documentation URL on API Gateway
 - `client_id`: Aruba Central's API Client ID
 - `client_secret`: Aruba Central's API Client Secret
 - `host`: Must always be set to  `central`
@@ -163,7 +165,7 @@ refresh_token: X12daE6BFhk8QqqzzeifHTYxxZZ12XxX
 
 ### Including the Role
 
-If role installed through  [Galaxy](https://galaxy.ansible.com/arubanetworks/aruba_central_role)  set role to  `arubanetworks.aruba_central_role`:
+If role installed through [Galaxy](https://galaxy.ansible.com/arubanetworks/aruba_central_role)  set role to  `arubanetworks.aruba_central_role`:
 
     ---
     -  hosts: all
@@ -175,7 +177,7 @@ If role installed through  [Galaxy](https://galaxy.ansible.com/arubanetworks/aru
            action: get_groups
            limit: 20
            offset: 0
-If role installed through  [Github](https://github.com/aruba/aruba-central-ansible-role)  set role to  `aruba-central-ansible-role`:
+If role installed through [Github](https://github.com/aruba/aruba-central-ansible-role)  set role to  `aruba-central-ansible-role`:
 
     ---
     -  hosts: all
