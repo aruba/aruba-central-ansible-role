@@ -5,4 +5,3 @@ client_secret: <Enter Client Secret>
 host: central  #do not change
 plugin: central_inventory #do not change
 refresh_token: <Enter Refresh Token>
-
