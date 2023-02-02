@@ -12,6 +12,7 @@ description: This module provides a mechanism to interact with groups used for c
       - "clone" creates a new group by cloning an existing group
       - "update" updates the group password of an existing UI group
       - "create" creates a new group
+      - "create_with_properties" creates a new group with specific properties
       - "delete" deletes an existing group
     required: true
     type: str
@@ -21,11 +22,12 @@ description: This module provides a mechanism to interact with groups used for c
       - clone
       - update
       - create
+      - create_with_properties
       - delete
   group_name:
     description:
       - Name of the group
-      - Used with actions "clone", "update", "create", and "delete"
+      - Used with actions "clone", "update", "create", "create_with_properties" and "delete"
     required: false
     type: str
   group_list:
@@ -91,6 +93,22 @@ description: This module provides a mechanism to interact with groups used for c
       template_group:
         wired: True
         wireless: False
+
+- name: Create a new ap group ("UI" for wired, "template" for wireless)
+  central_groups:
+    action: create_with_properties
+    group_name: new-test-group
+    group_attributes:
+      template_group:
+        wired: False
+        wireless: True
+      group_properties:
+        allowed_dev_types: ['Switches','AccessPoints', 'Gateways']
+        architecture: AOS10
+        ap_network_role: Standard
+        gw_network_role: BranchGateway
+        allowed_switch_types: ['AOS_CX']
+        monitor_only: []
 
 - name: Update an existing group (only available for UI groups)
   central_groups:
