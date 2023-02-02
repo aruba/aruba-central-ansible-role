@@ -47,6 +47,7 @@ options:
             - "clone" creates a new group by cloning an existing group
             - "update" updates the group password of an existing UI group
             - "create" creates a new group
+            - "create_with_properties" creates a new group with specific properties
             - "delete" deletes an existing group
         required: true
         type: str
@@ -56,11 +57,12 @@ options:
             - clone
             - update
             - create
+            - create_with_properties
             - delete
     group_name:
         description:
             - Name of the group
-            - Used with actions "clone", "update", "create", and "delete"
+            - Used with actions "clone", "update", "create", "create_with_properties", and "delete"
         required: false
         type: str
     group_list:
@@ -126,6 +128,22 @@ EXAMPLES = """
       template_group:
         wired: True
         wireless: False
+
+- name: Create a new ap group ("UI" for wired, "template" for wireless)
+  central_groups:
+    action: create_with_properties
+    group_name: new-test-group
+    group_attributes:
+      template_group:
+        wired: False
+        wireless: True
+      group_properties:
+        allowed_dev_types: ['Switches','AccessPoints', 'Gateways']
+        architecture: AOS10
+        ap_network_role: Standard
+        gw_network_role: BranchGateway
+        allowed_switch_types: ['AOS_CX']
+        monitor_only: []
 
 - name: Update an existing group (only available for UI groups)
   central_groups:
@@ -232,6 +250,61 @@ def create_group(central_api, group_name, group_attributes):
     return error_msg("create")
 
 
+def create_group_v3(central_api, group_name, group_attributes):
+    '''
+    Create new group given a group name, configuration
+    mode(UI or template mode of configuration) to be set per device type and
+    the user can also specify the following properties for the group
+    '''
+    if group_name and group_attributes is not None:
+        group_properties = group_attributes['group_properties']
+        path = "/configuration/v3/groups"
+        data = {
+            "group": group_name,
+            "group_attributes": {
+                "template_info": {},
+                "group_properties": {
+                    "AllowedDevTypes": group_properties['allowed_dev_types'],
+                }
+            }
+        }
+
+        if 'template_group' in group_attributes:
+
+            if 'wired' in group_attributes['template_group']:
+                data['group_attributes']['template_info'].update({
+                    "Wired": group_attributes['template_group']['wired']
+                })
+
+            if 'wireless' in group_attributes['template_group']:
+                data['group_attributes']['template_info'].update({
+                    "Wireless": group_attributes['template_group']['wireless']
+                })
+
+        if "AccessPoints" in group_properties['allowed_dev_types']:
+            data['group_attributes']['group_properties'].update({
+                "Architecture": group_properties['architecture'],
+                "ApNetworkRole": group_properties['ap_network_role'],
+            })
+
+        if "Gateways" in group_properties['allowed_dev_types']:
+            data['group_attributes']['group_properties'].update({
+                "Architecture": group_properties['architecture'],
+                "GwNetworkRole": group_properties['gw_network_role'],
+            })
+
+        if "Switches" in group_properties['allowed_dev_types']:
+            data['group_attributes']['group_properties'].update({
+                "AllowedSwitchTypes": group_properties['allowed_switch_types'],
+                "MonitorOnly": group_properties['monitor_only'],
+            })
+
+        headers = central_api.get_headers(False, "post")
+        result = central_api.post(path=path, headers=headers, data=data)
+        return result
+    return error_msg("create_with_properties")
+
+
 def update_group(central_api, group_name, group_attributes):
     '''
     Updates an existing UI group to change its password
@@ -282,6 +355,9 @@ def api_call(module):
     elif action == "create":
         result = create_group(central_api, group_name, group_attributes)
 
+    elif action == "create_with_properties":
+        result = create_group_v3(central_api, group_name, group_attributes)
+
     elif action == "update":
         result = update_group(central_api, group_name, group_attributes)
 
@@ -306,6 +382,7 @@ def main():
                                                             "get_group_mode",
                                                             "clone", "update",
                                                             "create",
+                                                            "create_with_properties",
                                                             "delete"]),
             limit=dict(required=False, type='int', default=20),
             offset=dict(required=False, type='int', default=0),
