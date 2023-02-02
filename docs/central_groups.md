@@ -3,6 +3,7 @@
 description: This module provides a mechanism to interact with groups used for configuration management of devices on Aruba Central.
 
 ##### ARGUMENTS
+
 ```YAML
   action:
     description:
@@ -68,6 +69,7 @@ description: This module provides a mechanism to interact with groups used for c
 ```
 
 ##### EXAMPLES
+
 ```YAML
 - name: Get all the UI and template groups on Central
   central_groups:

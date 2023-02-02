@@ -313,7 +313,7 @@ def main():
             group_name=dict(required=False, type='str'),
             group_attributes=dict(required=False, type='dict'),
             clone_from_group=dict(required=False, type='str')
-            ))
+        ))
 
     success_codes = [200, 201]
     exit_codes = [304, 400, 404]

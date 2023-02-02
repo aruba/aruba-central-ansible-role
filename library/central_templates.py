@@ -329,7 +329,7 @@ def main():
             version=dict(required=False, type='str', default="ALL"),
             model=dict(required=False, type='str', default="ALL"),
             local_file_path=dict(required=False, type='path', default=None)
-            ))
+        ))
     success_codes = [200, 201]
     exit_codes = [304, 400, 404]
     changed = False

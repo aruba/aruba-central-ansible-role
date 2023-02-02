@@ -1,8 +1,9 @@
 # module: central_variables
 
-description: This module provides a mechanism to interact with configuration variables for devices managed by Aruba Central. It supports the upload of a JSON-based file wherein variables for all/multiple devices are defined, organized by device serial number.  
+description: This module provides a mechanism to interact with configuration variables for devices managed by Aruba Central. It supports the upload of a JSON-based file wherein variables for all/multiple devices are defined, organized by device serial number.
 
 ##### ARGUMENTS
+
 ```YAML
   action:
     description:
@@ -82,6 +83,7 @@ description: This module provides a mechanism to interact with configuration var
 ```
 
 ##### EXAMPLES
+
 ```YAML
 - name: Get variables for a single device
   central_variables:

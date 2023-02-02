@@ -347,7 +347,7 @@ def main():
             offset=dict(required=False, type='int', default=0),
             variables=dict(required=False, type='dict', default={}),
             local_file_path=dict(required=False, type='str', default=None)
-            ))
+        ))
 
     success_codes = [200, 201]
     exit_codes = [304, 400, 404]
