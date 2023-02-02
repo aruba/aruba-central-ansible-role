@@ -599,7 +599,7 @@ def main():
             device_type=dict(required=False, type='str',
                              choices=["IAP", "CX", "ArubaSwitch",
                                       "MobilityController"])
-            ))
+        ))
     success_codes = [200, 201]
     exit_codes = [304, 400, 404]
     changed = False
