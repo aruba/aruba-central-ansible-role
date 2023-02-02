@@ -3,6 +3,7 @@
 description: This module provides a mechanism to interact with or upload configuration templates that are used for group-level and device-level configuration on Aruba Central.
 
 ##### ARGUMENTS
+
 ```YAML
   action:
     description:
@@ -91,6 +92,7 @@ description: This module provides a mechanism to interact with or upload configu
 ```
 
 ##### EXAMPLES
+
 ```YAML
 - name: Get all templates in a given group
   central_templates:
