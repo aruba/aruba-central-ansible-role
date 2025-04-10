@@ -1,3 +1,13 @@
+:warning: :warning: :warning: :warning: :warning: 
+
+**_This repository is deprecated._**
+
+**_For all Aruba created Ansible content visit [ArubaNetworks on Galaxy](https://galaxy.ansible.com/ui/namespaces/arubanetworks/)._**
+
+**_For official Aruba Central automation guides and workflows visit Aruba's [Developer Hub](https://developer.arubanetworks.com/hpe-aruba-networking-central)._**  
+
+:warning: :warning: :warning: :warning: :warning: 
+
 # aruba-central-ansible-role
 
 This Ansible Network role provides a set of platform dependent configuration management modules and plugins specifically designed for Aruba Central, which is a cloud-based Network Management System.
