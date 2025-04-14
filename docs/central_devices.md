@@ -3,6 +3,7 @@
 description: This module provides a mechanism to move devices between groups as well as to obtain configuration information of devices and templates on Aruba Central.
 
 ##### ARGUMENTS
+
 ```YAML
   action:
     description:
@@ -190,6 +191,7 @@ description: This module provides a mechanism to move devices between groups as 
 ```
 
 ##### EXAMPLES
+
 ```YAML
 - name: Move devices to a group
   central_devices:

@@ -1,8 +1,9 @@
 # module: central_sites
 
-description: This module provides a mechanism to interact with sites used for monitoring devices on Aruba Central. 
+description: This module provides a mechanism to interact with sites used for monitoring devices on Aruba Central.
 
 ##### ARGUMENTS
+
 ```YAML
   action:
     description:
@@ -145,6 +146,7 @@ description: This module provides a mechanism to interact with sites used for mo
 ```
 
 ##### EXAMPLES
+
 ```YAML
 - name: Get site details for a single site
   central_sites:

@@ -446,12 +446,12 @@ def main():
                                   country=dict(require=True, type='str'),
                                   zipcode=dict(require=False, type='str',
                                                default='')
-                               )),
+                              )),
             geolocation=dict(required=False, type='dict', default=None,
                              options=dict(
                                  latitude=dict(require=False, type='str'),
                                  longitude=dict(require=False, type='str')
-                              )),
+                             )),
             calculate_total=dict(required=False, type='bool', default=True),
             limit=dict(required=False, type='int', default=100),
             offset=dict(required=False, type='int', default=0),
@@ -460,7 +460,7 @@ def main():
             device_type=dict(required=False, type='str',
                              choices=["SWITCH", "IAP",
                                       "CONTROLLER"]),
-            ))
+        ))
     success_codes = [200, 201]
     exit_codes = [304, 400, 404]
     changed = False
